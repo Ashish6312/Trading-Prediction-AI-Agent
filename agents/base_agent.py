@@ -84,7 +84,7 @@ class BaseAgent:
                 base_url="https://text.pollinations.ai/openai"
             )
             response = pollinations_client.chat.completions.create(
-                model="openai",
+                model="mistral",
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": prompt}
@@ -92,7 +92,7 @@ class BaseAgent:
             )
             self.logger.info("Successfully generated response via Pollinations AI.")
             content = response.choices[0].message.content
-            return content if content else "Error: Received empty response from Pollinations AI."
+            return content if content else "I'm currently synthesizing new market insights. Please refresh in a moment."
         except Exception as e:
             self.logger.error(f"Critical error: Both OpenRouter and Pollinations LLM failed. {e}")
             return f"Analysis Offline: The intelligence swarm is currently undergoing maintenance (LLM connectivity issue). Please try again in 30 seconds. Details: {str(e)[:100]}"
