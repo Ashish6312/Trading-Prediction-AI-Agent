@@ -1,0 +1,13 @@
+openai
+requests
+python-dotenv
+pydantic
+apify-client
+rich
+beautifulsoup4
+markdown
+lxml
+pandas
+streamlit
+streamlit-chat
+streamlit-extras
