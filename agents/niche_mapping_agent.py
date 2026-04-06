@@ -27,6 +27,8 @@ If unsure, use 'Generalist'.
                 response = response.split("```")[1].split("```")[0].strip()
                 
             mapping = json.loads(response)
+            if not isinstance(mapping, dict):
+                mapping = {t: "Generalist" for t in traders_list}
             
             rationale = "Categorizing traders allows for niche-based copy trading, reducing risk."
             self.learn_skill("Categorize Traders", str(mapping), rationale)

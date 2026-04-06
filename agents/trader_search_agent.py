@@ -19,8 +19,9 @@ class TraderSearchAgent(BaseAgent):
             
             if traders and isinstance(traders, list):
                 for t in traders:
+                    # Found actual key for Polymarket Data API is 'proxyWallet'
+                    addr = t.get('proxyWallet') or t.get('proxyWalletAddress') or t.get('makerAddress') or t.get('address') or 'Unknown'
                     pnl = float(t.get('pnl') or t.get('profit') or 0)
-                    addr = t.get('proxyWalletAddress') or t.get('makerAddress') or t.get('address') or 'Unknown'
                     structured_traders.append({
                         "address": addr,
                         "pnl": pnl,
