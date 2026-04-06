@@ -28,19 +28,64 @@ if "rag_context" not in st.session_state:
 # Professional CSS
 st.markdown("""
 <style>
+    /* Glassmorphism Effect */
+    .stApp {
+        background: radial-gradient(circle at top right, #1e293b, #0f172a);
+    }
+    
+    div[data-testid="stSidebar"] {
+        background-color: rgba(15, 23, 42, 0.8) !important;
+        backdrop-filter: blur(10px);
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Fix Table Cutoff in Chat */
+    table {
+        display: block;
+        overflow-x: auto !important;
+        width: 100% !important;
+        border-collapse: collapse;
+        margin: 10px 0;
+        border-radius: 8px;
+        font-size: 0.85rem;
+    }
+    
+    th, td {
+        padding: 12px !important;
+        text-align: left !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    /* Chat Bubble Styling */
+    div[data-testid="stChatMessage"] {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 10px;
+    }
+
     .skill-card {
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 8px;
-        padding: 10px;
-        margin-bottom: 5px;
-        font-size: 0.85rem;
+        padding: 15px;
+        margin-bottom: 10px;
+        font-size: 0.9rem;
     }
-    div[data-testid="stSidebar"] {
-        background-color: #0f1218;
-    }
+    
     .stHeader {
         background: transparent;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
     }
 </style>
 """, unsafe_allow_html=True)
