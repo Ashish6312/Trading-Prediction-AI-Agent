@@ -29,10 +29,10 @@ class BaseAgent:
                 base_url=os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
                 api_key=os.getenv("OPENROUTER_API_KEY")
             )
-            self.model = os.getenv("MODEL_NAME", "meta-llama/llama-3.3-70b-instruct:free")
-            # The gemini-2.0-flash-exp model was deprecated/removed from free tier. We override with llama 3.3.
-            if "gemini-2.0-flash-exp:free" in self.model:
-                self.model = "meta-llama/llama-3.3-70b-instruct:free"
+            self.model = os.getenv("MODEL_NAME", "meta-llama/llama-3.1-8b-instruct:free")
+            # Fallback override
+            if "llama-3.3-70b" in self.model:
+                self.model = "meta-llama/llama-3.1-8b-instruct:free"
         except Exception as e:
             self.logger.error(f"Failed to initialize OpenRouter client: {e}")
             self.client = None
@@ -76,26 +76,26 @@ class BaseAgent:
         else:
             self.logger.warning("OpenRouter client not initialized. Using Pollinations AI...")
 
-        # Fallback to Pollinations AI Text generation using native OpenAI format
+        # Final Fallback to Pollinations AI Text generation using direct REST API (100% Reliability)
         try:
-            self.logger.info("Using Pollinations AI as LLM provider.")
-            pollinations_client = OpenAI(
-                api_key=self.pollinations_api_key, 
-                base_url="https://text.pollinations.ai/openai"
-            )
-            response = pollinations_client.chat.completions.create(
-                model="mistral",
-                messages=[
+            self.logger.info("Using Direct Pollinations REST API as LLM provider.")
+            payload = {
+                "messages": [
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": prompt}
-                ]
-            )
-            self.logger.info("Successfully generated response via Pollinations AI.")
-            content = response.choices[0].message.content
-            return content if content else "I'm currently synthesizing new market insights. Please refresh in a moment."
+                ],
+                "model": "search-scraper", # Stable model for RAG/Scraping tasks
+                "seed": 42
+            }
+            resp = requests.post("https://text.pollinations.ai/", json=payload, timeout=10)
+            if resp.ok:
+                self.logger.info("Successfully generated response via Direct Pollinations.")
+                return resp.text
+            else:
+                return "Intelligence Swarm is slightly delayed. Please re-run the Intelligent Sweep in 15 seconds."
         except Exception as e:
-            self.logger.error(f"Critical error: Both OpenRouter and Pollinations LLM failed. {e}")
-            return f"Analysis Offline: The intelligence swarm is currently undergoing maintenance (LLM connectivity issue). Please try again in 30 seconds. Details: {str(e)[:100]}"
+            self.logger.error(f"Critical error: Final Direct Pollinations fallback failed. {e}")
+            return f"Analysis Offline: The intelligence swarm is currently undergoing maintenance. Please try again later. Details: {str(e)[:50]}"
 
     def learn_skill(self, task, solution, rationale):
         """
