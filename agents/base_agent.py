@@ -91,10 +91,11 @@ class BaseAgent:
                 ]
             )
             self.logger.info("Successfully generated response via Pollinations AI.")
-            return response.choices[0].message.content
+            content = response.choices[0].message.content
+            return content if content else "Error: Received empty response from Pollinations AI."
         except Exception as e:
             self.logger.error(f"Critical error: Both OpenRouter and Pollinations LLM failed. {e}")
-            return f"Error contacting LLMs: {e}"
+            return f"Analysis Offline: The intelligence swarm is currently undergoing maintenance (LLM connectivity issue). Please try again in 30 seconds. Details: {str(e)[:100]}"
 
     def learn_skill(self, task, solution, rationale):
         """
