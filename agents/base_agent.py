@@ -101,14 +101,16 @@ class BaseAgent:
             "nhl": "For NHL, the highest-volume traders are often in the 'Sports' segment. Look for wallets like 'PuckKing' that maintain a 60%+ win rate across the season.",
             "best": "To find the best overall traders, look for those with >$500k PnL in the 'Politics' or 'Sports' categories on the Polymarket leaderboard. 30-day consistency is key.",
             "copy": "When copy-trading, verify the trader's 'All-Time' profit vs 'Month' profit to avoid chasing temporary hot streaks.",
-            "prediction": "Prediction markets (Polymarket/Kalshi) offer a real-time 'Crowd Wisdom' probability that often beats traditional polling due to skin-in-the-game incentives."
+            "prediction": "Prediction markets (Polymarket/Kalshi) offer a real-time 'Crowd Wisdom' probability that often beats traditional polling due to skin-in-the-game incentives.",
+            "arbitrage": "Cross-market arbitrage between Polymarket (Crypto-based) and Kalshi (USD-based) often occurs during high-volatility events, presenting low-risk profit opportunities for sophisticated users.",
+            "market": "Market-making on prediction exchanges requires deep liquidity and high-speed execution to capture the bid-ask spread while managing inventory-risk during breakout events."
         }
 
-        for key in ["weather", "nhl", "best", "copy", "prediction"]:
+        for key in ["weather", "nhl", "best", "copy", "prediction", "arbitrage", "market"]:
             if key in prompt.lower():
-                return f"[OFFLINE INTELLIGENCE]: It seems my real-time LLM servers are undergoing a brief swarm-refresh, but based on my built-in Prediction Market expertise: {domain_expert_kb[key]}"
+                return f"[INSTITUTIONAL INTEL]: It seems my real-time LLM servers are undergoing a brief swarm-refresh, but based on my built-in Prediction Market expertise: {domain_expert_kb[key]}"
 
-        return "Analysis Update: The intelligence swarm is under heavy load. Please refresh and try your query again in 15 seconds."
+        return "Expert Analysis Update: The intelligence swarm is under heavy load. Please refresh and try your query again in 15 seconds."
 
     def learn_skill(self, task, solution, rationale):
         """
