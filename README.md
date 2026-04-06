@@ -36,7 +36,7 @@ A production-ready, multi-agent AI framework for decentralized prediction market
    
    **Option A: Interactive Dashboard (Recommended)**
    ```bash
-   python -m streamlit run dashboard.py
+   streamlit run streamlit_app.py
    ```
    
    **Option B: CLI Pipeline**
