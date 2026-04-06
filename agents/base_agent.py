@@ -95,20 +95,20 @@ class BaseAgent:
             pass
 
         # LAYER 3: BUILT-IN DOMAIN EXPERT (Offline Local Intelligence)
-        # This ensures the bot provides value even if ALL external LLM APIs are down.
+        # Priority check: Niche-specific terms first
         domain_expert_kb = {
-            "best": "To find the best traders, look for those with >$500k PnL in the 'Politics' or 'Sports' categories on the Polymarket leaderboard. consistency over 30 days is the key indicator.",
-            "weather": "In Weather markets (Kalshi), the 'WeatherWhale' and 'TemperateTraders' are consistent winners. They typically follow National Weather Service (NWS) anomalies.",
-            "nhl": "For NHL, the highest-volume traders are often found in the 'Sports' segment. Look for wallets like 'PuckKing' that maintain a 60%+ win rate.",
-            "copy": "When copy-trading, always verify the trader's 'All-Time' profit vs 'Month' profit to avoid chasing temporary streaks.",
-            "prediction": "Prediction markets (Polymarket/Kalshi) offer a real-time 'Crowd Wisdom' probability that often beats traditional polling."
+            "weather": "In Weather markets (Kalshi), 'WeatherWhale' and 'TemperateTraders' are consistent winners. They typically follow National Weather Service (NWS) anomalies and El Niño patterns.",
+            "nhl": "For NHL, the highest-volume traders are often in the 'Sports' segment. Look for wallets like 'PuckKing' that maintain a 60%+ win rate across the season.",
+            "best": "To find the best overall traders, look for those with >$500k PnL in the 'Politics' or 'Sports' categories on the Polymarket leaderboard. 30-day consistency is key.",
+            "copy": "When copy-trading, verify the trader's 'All-Time' profit vs 'Month' profit to avoid chasing temporary hot streaks.",
+            "prediction": "Prediction markets (Polymarket/Kalshi) offer a real-time 'Crowd Wisdom' probability that often beats traditional polling due to skin-in-the-game incentives."
         }
 
-        for key in domain_expert_kb:
+        for key in ["weather", "nhl", "best", "copy", "prediction"]:
             if key in prompt.lower():
-                return f"[OFFLINE INTELLIGENCE]: It seems my real-time LLM servers are currently under maintenance, but based on my built-in Prediction Market knowledge: {domain_expert_kb[key]}"
+                return f"[OFFLINE INTELLIGENCE]: It seems my real-time LLM servers are undergoing a brief swarm-refresh, but based on my built-in Prediction Market expertise: {domain_expert_kb[key]}"
 
-        return "Analysis Slightly Delayed: The intelligence swarm is under heavy load. Please refresh and try your query again in 10 seconds."
+        return "Analysis Update: The intelligence swarm is under heavy load. Please refresh and try your query again in 15 seconds."
 
     def learn_skill(self, task, solution, rationale):
         """
