@@ -41,7 +41,15 @@ class BaseAgent:
         self.pollinations_api_key = os.getenv("POLLINATIONS_API_KEY", "pk_wnQgqIOSuFwKZdEI")
         self.skills_dir = "skills"
         os.makedirs(self.skills_dir, exist_ok=True)
-    
+        
+        # Tool access
+        import tools.apify_tool as apify
+        import tools.polymarket_tool as polymarket
+        import tools.kalshi_tool as kalshi
+        self.apify = apify
+        self.polymarket = polymarket
+        self.kalshi = kalshi
+
     def chat(self, prompt, system_prompt=None):
         """
         Sends a message to the LLM with fallback mechanisms and error handling.

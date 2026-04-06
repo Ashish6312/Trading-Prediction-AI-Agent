@@ -13,18 +13,31 @@ class TraderSearchAgent(BaseAgent):
         """
         self.logger.info("Searching Polymarket top traders for MONTH...")
         try:
-            # We also get numeric data for charts
-            traders = self.apify.get_polymarket_leaderboard(limit=limit)
+            # Using the official tool function for top traders
+            traders = get_top_traders(time_period="MONTH", limit=limit)
             structured_traders = []
-            for t in traders:
-                pnl = float(t.get('pnl') or t.get('profit') or 0)
-                addr = t.get('proxyWalletAddress') or t.get('makerAddress') or 'Unknown'
-                structured_traders.append({
-                    "address": addr,
-                    "pnl": pnl,
-                    "source": "Polymarket"
-                })
             
+            if traders and isinstance(traders, list):
+                for t in traders:
+                    pnl = float(t.get('pnl') or t.get('profit') or 0)
+                    addr = t.get('proxyWalletAddress') or t.get('makerAddress') or t.get('address') or 'Unknown'
+                    structured_traders.append({
+                        "address": addr,
+                        "pnl": pnl,
+                        "source": "Polymarket"
+                    })
+            
+            # Fallback to Apify if needed (if official data API is unreachable)
+            if not structured_traders:
+                from tools.apify_tool import scrape_polymarket_leaderboard
+                apify_traders = scrape_polymarket_leaderboard(limit=limit)
+                for t in apify_traders:
+                    structured_traders.append({
+                        "address": t.get('address') or 'Unknown',
+                        "pnl": float(t.get('pnl') or 0),
+                        "source": "Polymarket (Apify)"
+                    })
+
             self.learn_skill("Search Polymarket Month", str(structured_traders), "Identified whale-tier addresses for analysis mapping.")
             return structured_traders
         except Exception as e:
@@ -33,19 +46,18 @@ class TraderSearchAgent(BaseAgent):
 
     def search_kalshi_traders(self):
         """
-        Searches for consistent traders on Kalshi using direct API tool.
+        Searches for consistent traders on Kalshi using the scraper tool.
         """
         self.logger.info("Searching Kalshi consistent traders...")
         try:
-            # In a real scenario, this would use the Kalshi API
-            # For assessment demo, we use the tool's mock/scraped data
-            traders = self.kalshi.search_consistent_traders()
+            # Using the correctly imported function
+            traders = scrape_kalshi_top_traders()
             structured_traders = []
             for t in traders:
                 # Clean PNL string "$45,000" to float
-                pnl_str = t['pnl'].replace('$', '').replace(',', '')
+                pnl_str = t.get('pnl', '0').replace('$', '').replace(',', '')
                 structured_traders.append({
-                    "address": t['username'],
+                    "address": t.get('username') or t.get('address') or 'Unknown',
                     "pnl": float(pnl_str),
                     "source": "Kalshi"
                 })
