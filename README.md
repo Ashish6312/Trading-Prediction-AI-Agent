@@ -64,6 +64,3 @@ This project was built to meet 100% of the **CrowdWisdomTrading Internship Asses
 2. **NicheMappingAgent**: Analyzes trader behaviors to map them into niches (NBA, US Politics, Weather).
 3. **RAGEnrichmentAgent**: Fetches the latest global news regarding search queries via Apify.
 4. **TraderChatAgent**: Provides an interactive terminal/chat for ROI discussion and copy-trading advice.
-
----
-Developed for **CrowdWisdomTrading** by **Antigravity**.
